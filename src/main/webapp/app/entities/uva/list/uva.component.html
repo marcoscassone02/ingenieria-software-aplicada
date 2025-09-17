@@ -1,0 +1,124 @@
+<div>
+  <h2 id="page-heading" data-cy="UvaHeading">
+    <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.home.title">Uvas</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.home.refreshListLabel">Refrescar lista</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-uva"
+        [routerLink]="['/uva/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.home.createLabel">Crear nuevo Uva</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (uvas().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.home.notFound">Ningún Uvas encontrado</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="ph">
+              <div class="d-flex">
+                <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.ph">Ph</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="acidez">
+              <div class="d-flex">
+                <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.acidez">Acidez</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="brix">
+              <div class="d-flex">
+                <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.brix">Brix</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="variedad">
+              <div class="d-flex">
+                <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.variedad">Variedad</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="viniedo">
+              <div class="d-flex">
+                <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.viniedo">Viniedo</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cantidad">
+              <div class="d-flex">
+                <span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.cantidad">Cantidad</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (uva of uvas(); track trackId(uva)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/uva', uva.id, 'view']">{{ uva.id }}</a>
+              </td>
+              <td>{{ uva.ph }}</td>
+              <td>{{ uva.acidez }}</td>
+              <td>{{ uva.brix }}</td>
+              <td>{{ uva.variedad }}</td>
+              <td>{{ uva.viniedo }}</td>
+              <td>{{ uva.cantidad }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/uva', uva.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Vista</span>
+                  </a>
+
+                  <a [routerLink]="['/uva', uva.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editar</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(uva)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Eliminar</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

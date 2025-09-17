@@ -1,0 +1,41 @@
+{
+  "annotations": {
+    "changelogDate": "20250917163233"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "ph",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "acidez",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "brix",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "variedad",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "viniedo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cantidad",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Uva",
+  "relationships": [],
+  "searchEngine": "no"
+}

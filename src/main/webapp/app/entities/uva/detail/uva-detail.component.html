@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (uva(); as uvaRef) {
+      <div>
+        <h2 data-cy="uvaDetailsHeading"><span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.detail.title">Uva</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ uvaRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.ph">Ph</span></dt>
+          <dd>
+            <span>{{ uvaRef.ph }}</span>
+          </dd>
+          <dt><span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.acidez">Acidez</span></dt>
+          <dd>
+            <span>{{ uvaRef.acidez }}</span>
+          </dd>
+          <dt><span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.brix">Brix</span></dt>
+          <dd>
+            <span>{{ uvaRef.brix }}</span>
+          </dd>
+          <dt><span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.variedad">Variedad</span></dt>
+          <dd>
+            <span>{{ uvaRef.variedad }}</span>
+          </dd>
+          <dt><span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.viniedo">Viniedo</span></dt>
+          <dd>
+            <span>{{ uvaRef.viniedo }}</span>
+          </dd>
+          <dt><span jhiTranslate="ingenieriaSoftwareAplicadaApp.uva.cantidad">Cantidad</span></dt>
+          <dd>
+            <span>{{ uvaRef.cantidad }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/uva', uvaRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

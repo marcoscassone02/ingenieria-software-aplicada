@@ -1,0 +1,9 @@
+entity Uva {
+  ph Double required,
+  acidez Double required,
+  brix Double required,
+  variedad String required,
+  viniedo String required,
+  cantidad Integer required
+}
+

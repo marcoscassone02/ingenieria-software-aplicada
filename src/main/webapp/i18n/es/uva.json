@@ -1,0 +1,29 @@
+{
+  "ingenieriaSoftwareAplicadaApp": {
+    "uva": {
+      "home": {
+        "title": "Uvas",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Uva",
+        "createOrEditLabel": "Crear o editar Uva",
+        "notFound": "Ningún Uvas encontrado"
+      },
+      "created": "Un nuevo Uva ha sido creado con el identificador {{ param }}",
+      "updated": "Un Uva ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Uva ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Uva {{ id }}?"
+      },
+      "detail": {
+        "title": "Uva"
+      },
+      "id": "ID",
+      "ph": "Ph",
+      "acidez": "Acidez",
+      "brix": "Brix",
+      "variedad": "Variedad",
+      "viniedo": "Viniedo",
+      "cantidad": "Cantidad"
+    }
+  }
+}
