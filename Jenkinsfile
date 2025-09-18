@@ -10,7 +10,8 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'master',
-                    url: 'https://github.com/marcoscassone02/ingenieria-software-aplicada.git'
+                url: 'https://github.com/marcoscassone02/ingenieria-software-aplicada.git',
+                credentialsId: 'github-token'
             }
         }
 

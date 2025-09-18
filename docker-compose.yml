@@ -1,7 +1,8 @@
 version: '3.8'
+
 services:
   app:
-    image: marcoscassone/ingenieriasoftwareaplicada:latest # usamos tu repo en DockerHub
+    image: marcoscassone/ingenieriasoftwareaplicada:latest
     container_name: app-jenkins
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
@@ -42,6 +43,24 @@ services:
     networks:
       - app-network
 
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    user: root
+    ports:
+      - '8081:8080'
+      - '50000:50000'
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock # Jenkins usa el Docker del host
+      - /usr/bin/docker:/usr/bin/docker # Binario docker dentro del contenedor
+    networks:
+      - app-network
+    restart: unless-stopped
+
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  jenkins_home:
