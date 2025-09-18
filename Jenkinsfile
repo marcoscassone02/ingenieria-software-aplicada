@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                        docker build -t $DOCKERHUB_REPO:latest .
+                    docker build -f src/main/docker/Dockerfile -t $DOCKERHUB_REPO:latest .
                     """
                 }
             }
