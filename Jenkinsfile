@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Ajustá estos valores a tu cuenta de DockerHub
-        DOCKERHUB_CREDENTIALS = credentials('Dockerhub')  
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred')  
         DOCKERHUB_REPO = "marcoscassone/ingenieriasoftwareaplicada"
         APP_NAME = "ingenieriasoftwareaplicada"
     }
@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/tuusuario/tu-repo.git'
+                    url: 'https://github.com/marcoscassone02/ingenieria-software-aplicada.git'
             }
         }
 
