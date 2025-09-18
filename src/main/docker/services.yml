@@ -1,7 +1,15 @@
-# This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: ingenieriasoftwareaplicada
 services:
   postgresql:
-    extends:
-      file: ./postgresql.yml
-      service: postgresql
+    image: postgres:17.4
+    environment:
+      - POSTGRES_USER=ingenieriaSoftwareAplicada
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - '5432:5432'
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U $${POSTGRES_USER}
+      interval: 5s
+      timeout: 5s
+      retries: 10

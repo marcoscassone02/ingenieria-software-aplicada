@@ -1,0 +1,53 @@
+# Application configuration with ELK logging
+name: ingenieriasoftwareaplicada
+services:
+  app:
+    image: ingenieriasoftwareaplicada
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,api-docs
+      - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/ingenieriaSoftwareAplicada
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/ingenieriaSoftwareAplicada
+    ports:
+      - 127.0.0.1:8080:8080
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
+        labels: 'service=app,environment=development'
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - -f
+        - http://localhost:8080/management/health
+      interval: 5s
+      timeout: 5s
+      retries: 40
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - default
+      - elk
+
+  postgresql:
+    extends:
+      file: ./postgresql.yml
+      service: postgresql
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '10m'
+        max-file: '3'
+        labels: 'service=postgresql,environment=development'
+    networks:
+      - default
+      - elk
+
+networks:
+  elk:
+    external: true
+    name: elk-stack_elk

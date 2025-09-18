@@ -1,0 +1,19 @@
+services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.11.0
+    container_name: filebeat
+    user: root
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./filebeat-config.yml:/usr/share/filebeat/filebeat.yml:ro
+    environment:
+      - ELASTICSEARCH_HOSTS=localhost:9200
+      - KIBANA_HOST=localhost:5601
+    networks:
+      - elk-stack_elk
+    command: filebeat -e -strict.perms=false
+
+networks:
+  elk-stack_elk:
+    external: true
