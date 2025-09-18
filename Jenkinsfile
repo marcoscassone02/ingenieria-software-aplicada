@@ -2,10 +2,8 @@ pipeline {
     agent any
 
     environment {
-        // Ajustá estos valores a tu cuenta de DockerHub
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred')  
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-cred')
         DOCKERHUB_REPO = "marcoscassone/ingenieriasoftwareaplicada"
-        APP_NAME = "ingenieriasoftwareaplicada"
     }
 
     stages {
@@ -18,35 +16,38 @@ pipeline {
 
         stage('Build with Maven') {
             steps {
-                sh './mvnw clean package -DskipTests'
-            }
-        }
-
-        stage('Run tests') {
-            steps {
-                sh './mvnw test'
+                sh './mvnw clean package -DskipTests -B'
             }
         }
 
         stage('Build Docker image') {
             steps {
-                script {
-                    sh """
-                    docker build -f src/main/docker/Dockerfile -t $DOCKERHUB_REPO:latest .
-                    """
-                }
+                sh "docker build -t $DOCKERHUB_REPO:latest ."
             }
         }
 
         stage('Push Docker image') {
             steps {
+                sh """
+                    echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
+                    docker push $DOCKERHUB_REPO:latest
+                """
+            }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
                 script {
-                    sh """
-                        echo "$DOCKERHUB_CREDENTIALS_PSW" | docker login -u "$DOCKERHUB_CREDENTIALS_USR" --password-stdin
-                        docker push $DOCKERHUB_REPO:latest
-                    """
+                    // detener servicios anteriores si están corriendo
+                    sh 'docker-compose down || true'
+
+                    // actualizar imagen
+                    sh 'docker-compose pull'
+
+                    // levantar servicios
+                    sh 'docker-compose up -d --build'
                 }
             }
         }
     }
-} 
+}

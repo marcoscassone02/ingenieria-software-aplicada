@@ -1,35 +1,47 @@
+version: '3.8'
 services:
-  ingenieriasoftwareaplicada:
-    image: ingenieriasoftwareaplicada
+  app:
+    image: marcoscassone/ingenieriasoftwareaplicada:latest # usamos tu repo en DockerHub
+    container_name: app-jenkins
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ingenieriasoftwareaplicada-postgresql:5432/ingenieriaSoftwareAplicada
-      - SPRING_LIQUIBASE_URL=jdbc:postgresql://ingenieriasoftwareaplicada-postgresql:5432/ingenieriaSoftwareAplicada
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/ingenieriaSoftwareAplicada
+      - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgres:5432/ingenieriaSoftwareAplicada
+      - SPRING_DATASOURCE_USERNAME=ingenieriaSoftwareAplicada
+      - SPRING_DATASOURCE_PASSWORD=ingenieriaSoftwareAplicada
+      - JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=Y2FjNGZjMmJlZmFiZWNjN2M1YWZkNDIwNmNhNzlhNDJiZTdjN2NkMjlmM2NiNWUxZWFmZTU4YTVjZTg2MTYzMDJiYTUzZDhkZmMxOWFhZjg2ZDlkMDZkZDhkZGUzZjg5ZGQ3YWVmYTczNDQ5NWM1YmY3MDU5OGE0N2FjOGMyZmI=
     ports:
-      - 8080:8080
+      - '8080:8080'
     healthcheck:
-      test:
-        - CMD
-        - curl
-        - -f
-        - http://localhost:8080/management/health
+      test: ['CMD', 'curl', '-f', 'http://localhost:8080/management/health']
       interval: 5s
       timeout: 5s
       retries: 40
     depends_on:
-      ingenieriasoftwareaplicada-postgresql:
+      postgres:
         condition: service_healthy
-  ingenieriasoftwareaplicada-postgresql:
+    networks:
+      - app-network
+
+  postgres:
     image: postgres:17.4
+    container_name: docker-postgresql-1
     environment:
+      - POSTGRES_DB=ingenieriaSoftwareAplicada
       - POSTGRES_USER=ingenieriaSoftwareAplicada
-      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_PASSWORD=ingenieriaSoftwareAplicada
+    ports:
+      - '5432:5432'
     healthcheck:
-      test:
-        - CMD-SHELL
-        - pg_isready -U $${POSTGRES_USER}
+      test: ['CMD-SHELL', 'pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB']
       interval: 5s
       timeout: 5s
       retries: 10
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
