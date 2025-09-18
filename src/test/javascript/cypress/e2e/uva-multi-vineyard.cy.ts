@@ -2,8 +2,8 @@ import { entityCreateSaveButtonSelector, entityTableSelector } from '../support/
 
 describe('Uva Multi-Vineyard Management E2E Test', () => {
   const uvaPageUrl = '/uva';
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin'; // Cambiar a admin para tener permisos
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
 
   // Datos de múltiples viñedos y variedades
   const vineyardData = [
@@ -64,6 +64,12 @@ describe('Uva Multi-Vineyard Management E2E Test', () => {
     cy.wait('@entitiesRequest');
 
     vineyardData.forEach((data, index) => {
+      // ✅ CORREGIDO: Hacer clic en "Crear nueva UVA" para cada viñedo
+      cy.get('[data-cy="entityCreateButton"]').click();
+
+      // Esperar a que se cargue el formulario
+      cy.get('#field_ph').should('be.visible');
+
       cy.get('#field_ph').type(data.ph.toString());
       cy.get('#field_acidez').type(data.acidez.toString());
       cy.get('#field_brix').type(data.brix.toString());
@@ -81,6 +87,12 @@ describe('Uva Multi-Vineyard Management E2E Test', () => {
       // Verificar que aparece en la lista
       cy.get(entityTableSelector).should('contain', data.variedad);
       cy.get(entityTableSelector).should('contain', data.viniedo);
+
+      // Volver a la lista para la siguiente iteración (excepto en la última)
+      if (index < vineyardData.length - 1) {
+        cy.visit(uvaPageUrl);
+        cy.wait('@entitiesRequest');
+      }
     });
   });
 

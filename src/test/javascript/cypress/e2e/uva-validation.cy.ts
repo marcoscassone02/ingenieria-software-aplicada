@@ -2,8 +2,8 @@ import { entityCreateSaveButtonSelector, entityTableSelector } from '../support/
 
 describe('Uva Validation E2E Test', () => {
   const uvaPageUrl = '/uva';
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+  const username = Cypress.env('E2E_USERNAME') ?? 'admin'; // Cambiar a admin para tener permisos
+  const password = Cypress.env('E2E_PASSWORD') ?? 'admin';
 
   let uva;
 
@@ -33,6 +33,12 @@ describe('Uva Validation E2E Test', () => {
     cy.visit(uvaPageUrl);
     cy.wait('@entitiesRequest');
 
+    // ✅ CORREGIDO: Hacer clic en "Crear nueva UVA"
+    cy.get('[data-cy="entityCreateButton"]').click();
+
+    // Esperar a que se cargue el formulario
+    cy.get('#field_ph').should('be.visible');
+
     // Test pH válido (3.0-4.0)
     cy.get('#field_ph').type('3.2');
     cy.get('#field_acidez').type('6.5');
@@ -54,6 +60,12 @@ describe('Uva Validation E2E Test', () => {
   it('should validate Brix range for wine grapes', () => {
     cy.visit(uvaPageUrl);
     cy.wait('@entitiesRequest');
+
+    // ✅ CORREGIDO: Hacer clic en "Crear nueva UVA"
+    cy.get('[data-cy="entityCreateButton"]').click();
+
+    // Esperar a que se cargue el formulario
+    cy.get('#field_ph').should('be.visible');
 
     // Test Brix válido (18-28)
     cy.get('#field_ph').type('3.2');
@@ -77,6 +89,12 @@ describe('Uva Validation E2E Test', () => {
     cy.visit(uvaPageUrl);
     cy.wait('@entitiesRequest');
 
+    // ✅ CORREGIDO: Hacer clic en "Crear nueva UVA"
+    cy.get('[data-cy="entityCreateButton"]').click();
+
+    // Esperar a que se cargue el formulario
+    cy.get('#field_ph').should('be.visible');
+
     // Test acidez válida (5.0-8.0 g/L)
     cy.get('#field_ph').type('3.4');
     cy.get('#field_acidez').type('7.2');
@@ -99,6 +117,12 @@ describe('Uva Validation E2E Test', () => {
     cy.visit(uvaPageUrl);
     cy.wait('@entitiesRequest');
 
+    // ✅ CORREGIDO: Hacer clic en "Crear nueva UVA"
+    cy.get('[data-cy="entityCreateButton"]').click();
+
+    // Esperar a que se cargue el formulario
+    cy.get('#field_ph').should('be.visible');
+
     // Intentar guardar sin llenar campos requeridos
     cy.get(entityCreateSaveButtonSelector).should('be.disabled');
 
@@ -117,6 +141,12 @@ describe('Uva Validation E2E Test', () => {
     cy.wait('@entitiesRequest');
 
     varieties.forEach((variety, index) => {
+      // ✅ CORREGIDO: Hacer clic en "Crear nueva UVA" para cada variedad
+      cy.get('[data-cy="entityCreateButton"]').click();
+
+      // Esperar a que se cargue el formulario
+      cy.get('#field_ph').should('be.visible');
+
       cy.get('#field_ph').type('3.2');
       cy.get('#field_acidez').type('6.5');
       cy.get('#field_brix').type('22.0');
@@ -132,6 +162,10 @@ describe('Uva Validation E2E Test', () => {
       });
 
       cy.get(entityTableSelector).should('contain', variety);
+
+      // Volver a la lista para la siguiente iteración
+      cy.visit(uvaPageUrl);
+      cy.wait('@entitiesRequest');
     });
   });
 });
